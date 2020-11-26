@@ -3,10 +3,10 @@ pub struct Vec3(f64, f64, f64);
 
 #[allow(dead_code)]
 impl Vec3 {
-    pub fn length_squared(&self) -> f64 {
+    fn length_squared(&self) -> f64 {
         self.0 * self.0 + self.1 * self.1 + self.2 * self.2
     }
-    pub fn length(&self) -> f64 {
+    fn length(&self) -> f64 {
         self.length_squared().sqrt()
     }
 }
@@ -187,4 +187,158 @@ fn test_div_assign() {
     assert_eq!(l.0.round() as i64, 5);
     assert_eq!(l.1.round() as i64, 10);
     assert_eq!(l.2.round() as i64, 15);
+}
+
+#[derive(Debug, Clone)]
+struct Point(pub Vec3);
+
+#[allow(dead_code)]
+impl Point {
+    pub fn length_squared(&self) -> f64 {
+        self.0.length_squared()
+    }
+    pub fn length(&self) -> f64 {
+        self.0.length()
+    }
+}
+
+impl std::ops::Neg for Point {
+    type Output = Point;
+
+    fn neg(self) -> Self::Output {
+        Point(-self.0)
+    }
+}
+
+impl std::ops::Add for Point {
+    type Output = Point;
+
+    fn add(self, other: Point) -> Self::Output {
+        Point(self.0 + other.0)
+    }
+}
+
+impl std::ops::AddAssign for Point {
+    fn add_assign(&mut self, rhs: Point) {
+        self.0 += rhs.0;
+    }
+}
+
+impl std::ops::Sub for Point {
+    type Output = Point;
+
+    fn sub(self, other: Point) -> Self::Output {
+        Point(self.0 - other.0)
+    }
+}
+
+impl std::ops::SubAssign for Point {
+    fn sub_assign(&mut self, rhs: Point) {
+        self.0 -= rhs.0;
+    }
+}
+
+impl std::ops::Mul<f64> for Point {
+    type Output = Point;
+
+    fn mul(self, rhs: f64) -> Self::Output {
+        Point(self.0 * rhs)
+    }
+}
+
+impl std::ops::MulAssign<f64> for Point {
+    fn mul_assign(&mut self, rhs: f64) {
+        self.0 *= rhs;
+    }
+}
+
+impl std::ops::Div<f64> for Point {
+    type Output = Point;
+
+    fn div(self, rhs: f64) -> Self::Output {
+        Point(self.0 / rhs)
+    }
+}
+
+impl std::ops::DivAssign<f64> for Point {
+    fn div_assign(&mut self, rhs: f64) {
+        self.0 /= rhs;
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct Color(pub Vec3);
+
+#[allow(dead_code)]
+impl Color {
+    pub fn length_squared(&self) -> f64 {
+        self.0.length_squared()
+    }
+    pub fn length(&self) -> f64 {
+        self.0.length()
+    }
+}
+
+impl std::ops::Neg for Color {
+    type Output = Color;
+
+    fn neg(self) -> Self::Output {
+        Color(-self.0)
+    }
+}
+
+impl std::ops::Add for Color {
+    type Output = Color;
+
+    fn add(self, other: Color) -> Self::Output {
+        Color(self.0 + other.0)
+    }
+}
+
+impl std::ops::AddAssign for Color {
+    fn add_assign(&mut self, rhs: Color) {
+        self.0 += rhs.0;
+    }
+}
+
+impl std::ops::Sub for Color {
+    type Output = Color;
+
+    fn sub(self, other: Color) -> Self::Output {
+        Color(self.0 - other.0)
+    }
+}
+
+impl std::ops::SubAssign for Color {
+    fn sub_assign(&mut self, rhs: Color) {
+        self.0 -= rhs.0;
+    }
+}
+
+impl std::ops::Mul<f64> for Color {
+    type Output = Color;
+
+    fn mul(self, rhs: f64) -> Self::Output {
+        Color(self.0 * rhs)
+    }
+}
+
+impl std::ops::MulAssign<f64> for Color {
+    fn mul_assign(&mut self, rhs: f64) {
+        self.0 *= rhs;
+    }
+}
+
+impl std::ops::Div<f64> for Color {
+    type Output = Color;
+
+    fn div(self, rhs: f64) -> Self::Output {
+        Color(self.0 / rhs)
+    }
+}
+
+impl std::ops::DivAssign<f64> for Color {
+    fn div_assign(&mut self, rhs: f64) {
+        self.0 /= rhs;
+    }
 }
