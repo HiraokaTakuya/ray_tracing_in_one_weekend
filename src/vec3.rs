@@ -165,6 +165,21 @@ where
     }
 }
 
+impl<T> std::fmt::Display for Vec3<T>
+where
+    T: PointOrColor,
+{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{} {} {}",
+            (255.999 * self[0]) as i32,
+            (255.999 * self[1]) as i32,
+            (255.999 * self[2]) as i32
+        )
+    }
+}
+
 #[allow(dead_code)]
 pub type Point = Vec3<PointType>;
 #[allow(dead_code)]
