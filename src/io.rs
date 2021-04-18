@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub fn process() {
     const IMAGE_WIDTH: usize = 256;
     const IMAGE_HEIGHT: usize = 256;
@@ -18,3 +19,6 @@ pub fn process() {
         }
     }
 }
+
+#[allow(dead_code)]
+pub fn process2() {}
