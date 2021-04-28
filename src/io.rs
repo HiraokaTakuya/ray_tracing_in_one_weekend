@@ -1,4 +1,6 @@
+use crate::hittable_list::HittableList;
 use crate::ray::Ray;
+use crate::sphere::Sphere;
 use crate::vec3::{Color, Point, Vec3};
 
 #[allow(dead_code)]
@@ -34,6 +36,11 @@ pub fn process2() {
     let image_width = 400;
     let image_height = image_width * aspect_ratio.height / aspect_ratio.width;
 
+    // World
+    let mut world = HittableList::<Sphere>::default();
+    world.push(Sphere::new(Point::new(0.0, 0.0, -1.0), 0.5));
+    world.push(Sphere::new(Point::new(0.0, -100.5, -1.0), 100.0));
+
     // Camera
     let viewpoint_height = 2.0;
     let viewpoint_width = viewpoint_height * aspect_ratio.width as f64 / aspect_ratio.height as f64;
@@ -55,7 +62,7 @@ pub fn process2() {
                 origin,
                 direction: lower_left_corner + u * horizontal + v * vertical - origin,
             };
-            let pixel = r.color();
+            let pixel = r.color(&world);
             println!("{}", pixel);
         }
     }
