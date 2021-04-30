@@ -1,3 +1,3 @@
 fn main() {
-    ray_tracing_in_one_weekend::io::process2();
+    ray_tracing_in_one_weekend::io::process();
 }

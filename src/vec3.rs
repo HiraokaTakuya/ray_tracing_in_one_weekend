@@ -24,6 +24,15 @@ impl Vec3 {
         let len = self.length();
         self / len
     }
+    pub fn to_string(&self, samples_per_pixel: f64) -> String {
+        let scale = 1.0 / samples_per_pixel;
+        format!(
+            "{} {} {}",
+            (256.0 * (self[0] * scale).clamp(0.0, 0.999)) as i64,
+            (256.0 * (self[1] * scale).clamp(0.0, 0.999)) as i64,
+            (256.0 * (self[2] * scale).clamp(0.0, 0.999)) as i64,
+        )
+    }
 }
 
 impl std::ops::Neg for Vec3 {
@@ -120,17 +129,17 @@ impl std::ops::IndexMut<usize> for Vec3 {
     }
 }
 
-impl std::fmt::Display for Vec3 {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "{} {} {}",
-            (255.999 * self[0]) as i32,
-            (255.999 * self[1]) as i32,
-            (255.999 * self[2]) as i32
-        )
-    }
-}
+//impl std::fmt::Display for Vec3 {
+//    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+//        write!(
+//            f,
+//            "{} {} {}",
+//            (255.999 * self[0]) as i32,
+//            (255.999 * self[1]) as i32,
+//            (255.999 * self[2]) as i32
+//        )
+//    }
+//}
 
 #[allow(dead_code)]
 pub type Point = Vec3;

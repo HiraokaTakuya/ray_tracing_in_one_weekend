@@ -1,6 +1,7 @@
-pub mod io;
-mod vec3;
-mod ray;
+mod camera;
 mod hittable;
-mod sphere;
 mod hittable_list;
+pub mod io;
+mod ray;
+mod sphere;
+mod vec3;

@@ -10,6 +10,7 @@ impl<T> HittableList<T>
 where
     T: Hittable,
 {
+    #[allow(dead_code)]
     pub fn clear(&mut self) {
         self.0.clear();
     }

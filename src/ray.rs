@@ -31,6 +31,7 @@ impl Ray {
     }
 }
 
+#[allow(dead_code)]
 fn hit_sphere(center: &Point, radius: f64, r: &Ray) -> f64 {
     let oc = r.origin - *center;
     let a = r.direction.length_squared();
@@ -44,6 +45,7 @@ fn hit_sphere(center: &Point, radius: f64, r: &Ray) -> f64 {
     }
 }
 
+#[allow(dead_code)]
 fn degrees_to_radians(degrees: f64) -> f64 {
     degrees * std::f64::consts::PI / 180.0
 }
