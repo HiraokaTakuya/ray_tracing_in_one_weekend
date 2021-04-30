@@ -17,10 +17,13 @@ impl Ray {
     pub fn at(&self, t: f64) -> Point {
         self.origin + self.direction * t
     }
-    pub fn color<T>(&self, world: &T, rng: &mut dyn rand::RngCore) -> Color
+    pub fn color<T>(&self, world: &T, rng: &mut dyn rand::RngCore, depth: i64) -> Color
     where
         T: Hittable,
     {
+        if depth <= 0 {
+            return Color::default();
+        }
         let mut rec = HitRecord::default();
         if world.hit(&self, 0.0, std::f64::INFINITY, &mut rec) {
             let target = rec.point + rec.normal + Vec3::new_random_in_unit_sphere(rng);
@@ -29,7 +32,7 @@ impl Ray {
                     origin: rec.point,
                     direction: target - rec.point,
                 }
-                .color(world, rng);
+                .color(world, rng, depth - 1);
         }
         let unit_direction = self.direction.unit();
         let t = 0.5 * (unit_direction[1] + 1.0);

@@ -18,6 +18,7 @@ pub fn process() {
     let image_width = 400;
     let image_height = image_width * aspect_ratio.height / aspect_ratio.width;
     let samples_per_pixel = 100;
+    let max_depth = 50;
 
     // World
     let mut world = HittableList::<Sphere>::default();
@@ -38,7 +39,7 @@ pub fn process() {
                 let u = (i as f64 + rng.gen::<f64>()) / (image_width - 1) as f64;
                 let v = (j as f64 + rng.gen::<f64>()) / (image_height - 1) as f64;
                 let ray = camera.ray(u, v);
-                color += ray.color(&world, &mut rng);
+                color += ray.color(&world, &mut rng, max_depth);
             }
             println!("{}", color.to_string(samples_per_pixel as f64));
         }
