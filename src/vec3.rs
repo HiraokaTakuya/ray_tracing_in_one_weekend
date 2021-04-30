@@ -1,3 +1,5 @@
+use rand::prelude::*;
+
 #[derive(Debug, Clone, Copy, Default)]
 pub struct Vec3 {
     e: [f64; 3],
@@ -7,6 +9,32 @@ pub struct Vec3 {
 impl Vec3 {
     pub fn new(e0: f64, e1: f64, e2: f64) -> Self {
         Self { e: [e0, e1, e2] }
+    }
+    pub fn new_random(rng: &mut dyn rand::RngCore) -> Self {
+        Self {
+            e: [rng.gen(), rng.gen(), rng.gen()],
+        }
+    }
+    pub fn new_random_range<R>(rng: &mut dyn rand::RngCore, range: R) -> Self
+    where
+        R: rand::distributions::uniform::SampleRange<f64> + Clone,
+    {
+        Self {
+            e: [
+                rng.gen_range(range.clone()),
+                rng.gen_range(range.clone()),
+                rng.gen_range(range),
+            ],
+        }
+    }
+    pub fn new_random_in_unit_sphere(rng: &mut dyn rand::RngCore) -> Self {
+        loop {
+            let p = Vec3::new_random_range(rng, -1.0..1.0);
+            if p.length_squared() >= 1.0 {
+                continue;
+            }
+            return p;
+        }
     }
     pub fn length_squared(&self) -> f64 {
         self[0] * self[0] + self[1] * self[1] + self[2] * self[2]

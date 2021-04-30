@@ -38,7 +38,7 @@ pub fn process() {
                 let u = (i as f64 + rng.gen::<f64>()) / (image_width - 1) as f64;
                 let v = (j as f64 + rng.gen::<f64>()) / (image_height - 1) as f64;
                 let ray = camera.ray(u, v);
-                color += ray.color(&world);
+                color += ray.color(&world, &mut rng);
             }
             println!("{}", color.to_string(samples_per_pixel as f64));
         }

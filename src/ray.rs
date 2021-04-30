@@ -1,5 +1,5 @@
 use crate::vec3::Direction;
-use crate::vec3::Point;
+use crate::vec3::{Point, Vec3};
 use crate::{
     hittable::{HitRecord, Hittable},
     vec3::Color,
@@ -17,13 +17,19 @@ impl Ray {
     pub fn at(&self, t: f64) -> Point {
         self.origin + self.direction * t
     }
-    pub fn color<T>(&self, world: &T) -> Color
+    pub fn color<T>(&self, world: &T, rng: &mut dyn rand::RngCore) -> Color
     where
         T: Hittable,
     {
         let mut rec = HitRecord::default();
         if world.hit(&self, 0.0, std::f64::INFINITY, &mut rec) {
-            return 0.5 * (rec.normal + Color::new(1.0, 1.0, 1.0));
+            let target = rec.point + rec.normal + Vec3::new_random_in_unit_sphere(rng);
+            return 0.5
+                * Ray {
+                    origin: rec.point,
+                    direction: target - rec.point,
+                }
+                .color(world, rng);
         }
         let unit_direction = self.direction.unit();
         let t = 0.5 * (unit_direction[1] + 1.0);
