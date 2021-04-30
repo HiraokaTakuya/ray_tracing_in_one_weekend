@@ -56,9 +56,9 @@ impl Vec3 {
         let scale = 1.0 / samples_per_pixel;
         format!(
             "{} {} {}",
-            (256.0 * (self[0] * scale).clamp(0.0, 0.999)) as i64,
-            (256.0 * (self[1] * scale).clamp(0.0, 0.999)) as i64,
-            (256.0 * (self[2] * scale).clamp(0.0, 0.999)) as i64,
+            (256.0 * (self[0] * scale).sqrt().clamp(0.0, 0.999)) as i64,
+            (256.0 * (self[1] * scale).sqrt().clamp(0.0, 0.999)) as i64,
+            (256.0 * (self[2] * scale).sqrt().clamp(0.0, 0.999)) as i64,
         )
     }
 }
