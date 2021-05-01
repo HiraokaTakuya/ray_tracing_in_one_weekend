@@ -25,7 +25,7 @@ impl Ray {
             return Color::default();
         }
         let mut rec = HitRecord::default();
-        if world.hit(&self, 0.0, std::f64::INFINITY, &mut rec) {
+        if world.hit(&self, 0.001, std::f64::INFINITY, &mut rec) {
             let target = rec.point + rec.normal + Vec3::new_random_in_unit_sphere(rng);
             return 0.5
                 * Ray {
