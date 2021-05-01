@@ -36,6 +36,9 @@ impl Vec3 {
             return p;
         }
     }
+    pub fn new_random_unit(rng: &mut dyn rand::RngCore) -> Self {
+        Self::new_random_in_unit_sphere(rng).unit()
+    }
     pub fn length_squared(&self) -> f64 {
         self[0] * self[0] + self[1] * self[1] + self[2] * self[2]
     }
