@@ -39,6 +39,14 @@ impl Vec3 {
     pub fn new_random_unit(rng: &mut dyn rand::RngCore) -> Self {
         Self::new_random_in_unit_sphere(rng).unit()
     }
+    pub fn new_random_in_hemisphere(rng: &mut dyn rand::RngCore, normal: &Vec3) -> Self {
+        let in_unit_sphere = Self::new_random_in_unit_sphere(rng);
+        if in_unit_sphere.dot(normal) > 0.0 {
+            in_unit_sphere
+        } else {
+            -in_unit_sphere
+        }
+    }
     pub fn length_squared(&self) -> f64 {
         self[0] * self[0] + self[1] * self[1] + self[2] * self[2]
     }
