@@ -1,8 +1,10 @@
 use crate::camera::Camera;
 use crate::hittable_list::HittableList;
+use crate::material::{Lambertian, Metal};
 use crate::sphere::Sphere;
 use crate::vec3::{Color, Point};
 use rand::prelude::*;
+use std::rc::Rc;
 
 #[allow(dead_code)]
 pub fn process() {
@@ -22,8 +24,31 @@ pub fn process() {
 
     // World
     let mut world = HittableList::<Sphere>::default();
-    world.push(Sphere::new(Point::new(0.0, 0.0, -1.0), 0.5));
-    world.push(Sphere::new(Point::new(0.0, -100.5, -1.0), 100.0));
+    let material_ground = Lambertian::new(Color::new(0.8, 0.8, 0.0));
+    let material_center = Lambertian::new(Color::new(0.7, 0.3, 0.3));
+    let material_left = Metal::new(Color::new(0.8, 0.8, 0.8));
+    let material_right = Metal::new(Color::new(0.8, 0.6, 0.2));
+
+    world.push(Sphere::new(
+        Point::new(0.0, -100.5, -1.0),
+        100.0,
+        Rc::new(material_ground),
+    ));
+    world.push(Sphere::new(
+        Point::new(0.0, 0.0, -1.0),
+        0.5,
+        Rc::new(material_center),
+    ));
+    world.push(Sphere::new(
+        Point::new(-1.0, 0.0, -1.0),
+        0.5,
+        Rc::new(material_left),
+    ));
+    world.push(Sphere::new(
+        Point::new(1.0, 0.0, -1.0),
+        0.5,
+        Rc::new(material_right),
+    ));
 
     // Camera
     let camera = Camera::new();

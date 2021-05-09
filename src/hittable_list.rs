@@ -1,7 +1,7 @@
 use crate::hittable::{HitRecord, Hittable};
 use crate::ray::Ray;
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct HittableList<T>(Vec<T>)
 where
     T: Hittable;
@@ -24,7 +24,7 @@ where
     T: Hittable,
 {
     fn hit(&self, r: &Ray, t_min: f64, t_max: f64, rec: &mut HitRecord) -> bool {
-        let mut temp = HitRecord::default();
+        let mut temp = HitRecord::new();
         let mut hit_anything = false;
         let mut closest_so_far = t_max;
 

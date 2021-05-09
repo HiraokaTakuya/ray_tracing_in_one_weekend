@@ -72,6 +72,13 @@ impl Vec3 {
             (256.0 * (self[2] * scale).sqrt().clamp(0.0, 0.999)) as i64,
         )
     }
+    pub fn is_near_zero(&self) -> bool {
+        let s = 1e-8;
+        self[0].abs() < s && self[1].abs() < s && self[2].abs() < s
+    }
+    pub fn reflect(&self, n: &Vec3) -> Self {
+        *self - 2.0 * self.dot(n) * *n
+    }
 }
 
 impl std::ops::Neg for Vec3 {
@@ -138,6 +145,14 @@ impl std::ops::Mul<Vec3> for f64 {
     }
 }
 
+impl std::ops::Mul<Vec3> for Vec3 {
+    type Output = Vec3;
+
+    fn mul(self, rhs: Vec3) -> Self::Output {
+        Vec3::new(self[0] * rhs[0], self[1] * rhs[1], self[2] * rhs[2])
+    }
+}
+
 impl std::ops::Div<f64> for Vec3 {
     type Output = Vec3;
 
@@ -167,18 +182,6 @@ impl std::ops::IndexMut<usize> for Vec3 {
         &mut self.e[index]
     }
 }
-
-//impl std::fmt::Display for Vec3 {
-//    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-//        write!(
-//            f,
-//            "{} {} {}",
-//            (255.999 * self[0]) as i32,
-//            (255.999 * self[1]) as i32,
-//            (255.999 * self[2]) as i32
-//        )
-//    }
-//}
 
 #[allow(dead_code)]
 pub type Point = Vec3;

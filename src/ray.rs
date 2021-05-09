@@ -1,12 +1,12 @@
 use crate::vec3::Direction;
-use crate::vec3::{Point, Vec3};
+use crate::vec3::Point;
 use crate::{
     hittable::{HitRecord, Hittable},
     vec3::Color,
 };
 
 #[allow(dead_code)]
-#[derive(Clone)]
+#[derive(Default, Clone)]
 pub struct Ray {
     pub origin: Point,
     pub direction: Direction,
@@ -24,15 +24,18 @@ impl Ray {
         if depth <= 0 {
             return Color::default();
         }
-        let mut rec = HitRecord::default();
+        let mut rec = HitRecord::new();
         if world.hit(&self, 0.001, std::f64::INFINITY, &mut rec) {
-            let target = rec.point + Vec3::new_random_in_hemisphere(rng, &rec.normal);
-            return 0.5
-                * Ray {
-                    origin: rec.point,
-                    direction: target - rec.point,
-                }
-                .color(world, rng, depth - 1);
+            let mut scattered = Ray::default();
+            let mut attenuation = Color::default();
+            if rec
+                .material
+                .scatter(&self, &rec, &mut attenuation, &mut scattered, rng)
+            {
+                return attenuation * scattered.color(world, rng, depth - 1);
+            } else {
+                return Color::default();
+            }
         }
         let unit_direction = self.direction.unit();
         let t = 0.5 * (unit_direction[1] + 1.0);
