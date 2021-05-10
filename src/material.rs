@@ -1,4 +1,4 @@
-use rand::RngCore;
+use rand::{Rng, RngCore};
 
 use crate::{
     hittable::HitRecord,
@@ -116,6 +116,12 @@ impl Dielectric {
             index_of_refraction,
         }
     }
+    pub fn reflectance(cosine: f64, ref_idx: f64) -> f64 {
+        // Use Schlick's approximation for reflectance.
+        let r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
+        let r0 = r0 * r0;
+        r0 + (1.0 - r0) * (1.0 - cosine).powf(5.0)
+    }
 }
 
 impl Material for Dielectric {
@@ -125,7 +131,7 @@ impl Material for Dielectric {
         rec: &HitRecord,
         attenuation: &mut Color,
         scattered: &mut Ray,
-        _rng: &mut dyn RngCore,
+        rng: &mut dyn RngCore,
     ) -> bool {
         *attenuation = Color::new(1.0, 1.0, 1.0);
         let refraction_ratio = if rec.front_face {
@@ -147,11 +153,12 @@ impl Material for Dielectric {
 
         let cannot_refract = refraction_ratio * sin_theta > 1.0;
 
-        let direction = if cannot_refract {
-            unit_direction.reflect(&rec.normal)
-        } else {
-            unit_direction.refract(&rec.normal, refraction_ratio)
-        };
+        let direction =
+            if cannot_refract || Self::reflectance(cos_theta, refraction_ratio) > rng.gen() {
+                unit_direction.reflect(&rec.normal)
+            } else {
+                unit_direction.refract(&rec.normal, refraction_ratio)
+            };
 
         *scattered = Ray {
             origin: rec.point,
