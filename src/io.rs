@@ -1,13 +1,13 @@
-use crate::camera::Camera;
-use crate::hittable_list::HittableList;
-use crate::material::{Dielectric, Lambertian, Metal};
-use crate::sphere::Sphere;
-use crate::vec3::{Color, Point, Vec3};
+use crate::{
+    camera::Camera,
+    hittable_list::random_scene,
+    vec3::{Color, Point, Vec3},
+};
 use rand::prelude::*;
-use std::rc::Rc;
 
-#[allow(dead_code)]
 pub fn process() {
+    let mut rng = rand::thread_rng();
+
     // Image
     struct AspectRatio {
         width: usize,
@@ -19,53 +19,23 @@ pub fn process() {
         }
     }
     let aspect_ratio = AspectRatio {
-        width: 16,
-        height: 9,
+        width: 3,
+        height: 2,
     };
-    let image_width = 400;
+    let image_width = 1200;
     let image_height = image_width * aspect_ratio.height / aspect_ratio.width;
-    let samples_per_pixel = 100;
+    let samples_per_pixel = 500;
     let max_depth = 50;
 
     // World
-    let mut world = HittableList::<Sphere>::default();
-    let material_ground = Lambertian::new(Color::new(0.8, 0.8, 0.0));
-    let material_center = Lambertian::new(Color::new(0.1, 0.2, 0.5));
-    let material_left = Dielectric::new(1.5);
-    let material_right = Metal::new(Color::new(0.8, 0.6, 0.2), 0.0);
-
-    world.push(Sphere::new(
-        Point::new(0.0, -100.5, -1.0),
-        100.0,
-        Rc::new(material_ground),
-    ));
-    world.push(Sphere::new(
-        Point::new(0.0, 0.0, -1.0),
-        0.5,
-        Rc::new(material_center),
-    ));
-    world.push(Sphere::new(
-        Point::new(-1.0, 0.0, -1.0),
-        0.5,
-        Rc::new(material_left.clone()),
-    ));
-    world.push(Sphere::new(
-        Point::new(-1.0, 0.0, -1.0),
-        -0.45,
-        Rc::new(material_left),
-    ));
-    world.push(Sphere::new(
-        Point::new(1.0, 0.0, -1.0),
-        0.5,
-        Rc::new(material_right),
-    ));
+    let world = random_scene(&mut rng);
 
     // Camera
-    let lookfrom = Point::new(3.0, 3.0, 2.0);
-    let lookat = Point::new(0.0, 0.0, -1.0);
+    let lookfrom = Point::new(13.0, 2.0, 3.0);
+    let lookat = Point::new(0.0, 0.0, 0.0);
     let vup = Vec3::new(0.0, 1.0, 0.0);
-    let dist_to_focus = (lookfrom - lookat).length();
-    let aperture = 2.0;
+    let dist_to_focus = 10.0;
+    let aperture = 0.1;
     let camera = Camera::new(
         lookfrom,
         lookat,
@@ -79,7 +49,6 @@ pub fn process() {
     // Render
     println!("P3\n{} {}\n255", image_width, image_height);
 
-    let mut rng = rand::thread_rng();
     for j in (0..image_height).rev() {
         for i in 0..image_width {
             let mut color = Color::default();

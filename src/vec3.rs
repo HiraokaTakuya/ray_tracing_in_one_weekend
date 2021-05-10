@@ -5,7 +5,6 @@ pub struct Vec3 {
     e: [f64; 3],
 }
 
-#[allow(dead_code)]
 impl Vec3 {
     pub fn new(e0: f64, e1: f64, e2: f64) -> Self {
         Self { e: [e0, e1, e2] }
@@ -209,11 +208,8 @@ impl std::ops::IndexMut<usize> for Vec3 {
     }
 }
 
-#[allow(dead_code)]
 pub type Point = Vec3;
-#[allow(dead_code)]
 pub type Direction = Vec3;
-#[allow(dead_code)]
 pub type Color = Vec3;
 
 #[test]

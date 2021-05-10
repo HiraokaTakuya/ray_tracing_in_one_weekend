@@ -24,6 +24,7 @@ impl Sphere {
 }
 
 impl Hittable for Sphere {
+    #[allow(clippy::suspicious_operation_groupings)]
     fn hit(&self, r: &Ray, t_min: f64, t_max: f64, rec: &mut HitRecord) -> bool {
         let oc = r.origin - self.center;
         let a = r.direction.length_squared();

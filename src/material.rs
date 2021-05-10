@@ -1,10 +1,9 @@
-use rand::{Rng, RngCore};
-
 use crate::{
     hittable::HitRecord,
     ray::Ray,
     vec3::{Color, Vec3},
 };
+use rand::{Rng, RngCore};
 
 pub trait Material: CloneMaterial {
     fn scatter(

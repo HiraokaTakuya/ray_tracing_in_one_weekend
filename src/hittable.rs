@@ -15,15 +15,6 @@ pub struct HitRecord {
 }
 
 impl HitRecord {
-    pub fn new() -> Self {
-        Self {
-            point: Point::default(),
-            normal: Vec3::default(),
-            material: Rc::new(Lambertian::new(Color::default())),
-            t: 0.0,
-            front_face: false,
-        }
-    }
     pub fn set_face_normal(&mut self, r: &Ray, outward_normal: &Vec3) {
         self.front_face = r.direction.dot(outward_normal) < 0.0;
         self.normal = if self.front_face {
@@ -31,6 +22,18 @@ impl HitRecord {
         } else {
             -*outward_normal
         };
+    }
+}
+
+impl Default for HitRecord {
+    fn default() -> Self {
+        Self {
+            point: Point::default(),
+            normal: Vec3::default(),
+            material: Rc::new(Lambertian::new(Color::default())),
+            t: 0.0,
+            front_face: false,
+        }
     }
 }
 
