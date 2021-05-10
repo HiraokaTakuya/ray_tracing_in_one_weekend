@@ -42,6 +42,11 @@ pub fn process() {
     world.push(Sphere::new(
         Point::new(-1.0, 0.0, -1.0),
         0.5,
+        Rc::new(material_left.clone()),
+    ));
+    world.push(Sphere::new(
+        Point::new(-1.0, 0.0, -1.0),
+        -0.4,
         Rc::new(material_left),
     ));
     world.push(Sphere::new(
