@@ -1,6 +1,6 @@
 use crate::camera::Camera;
 use crate::hittable_list::HittableList;
-use crate::material::{Lambertian, Metal};
+use crate::material::{Dielectric, Lambertian, Metal};
 use crate::sphere::Sphere;
 use crate::vec3::{Color, Point};
 use rand::prelude::*;
@@ -25,8 +25,8 @@ pub fn process() {
     // World
     let mut world = HittableList::<Sphere>::default();
     let material_ground = Lambertian::new(Color::new(0.8, 0.8, 0.0));
-    let material_center = Lambertian::new(Color::new(0.7, 0.3, 0.3));
-    let material_left = Metal::new(Color::new(0.8, 0.8, 0.8), 0.3);
+    let material_center = Dielectric::new(1.5);
+    let material_left = Dielectric::new(1.5);
     let material_right = Metal::new(Color::new(0.8, 0.6, 0.2), 1.0);
 
     world.push(Sphere::new(
