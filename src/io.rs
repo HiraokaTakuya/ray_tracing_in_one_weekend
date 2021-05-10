@@ -2,7 +2,7 @@ use crate::camera::Camera;
 use crate::hittable_list::HittableList;
 use crate::material::{Dielectric, Lambertian, Metal};
 use crate::sphere::Sphere;
-use crate::vec3::{Color, Point};
+use crate::vec3::{Color, Point, Vec3};
 use rand::prelude::*;
 use std::rc::Rc;
 
@@ -28,24 +28,46 @@ pub fn process() {
     let max_depth = 50;
 
     // World
-    let r = (std::f64::consts::PI / 4.0).cos();
     let mut world = HittableList::<Sphere>::default();
-    let material_left = Lambertian::new(Color::new(0.0, 0.0, 1.0));
-    let material_right = Lambertian::new(Color::new(1.0, 0.0, 0.0));
+    let material_ground = Lambertian::new(Color::new(0.8, 0.8, 0.0));
+    let material_center = Lambertian::new(Color::new(0.1, 0.2, 0.5));
+    let material_left = Dielectric::new(1.5);
+    let material_right = Metal::new(Color::new(0.8, 0.6, 0.2), 0.0);
 
     world.push(Sphere::new(
-        Point::new(-r, 0.0, -1.0),
-        r,
+        Point::new(0.0, -100.5, -1.0),
+        100.0,
+        Rc::new(material_ground),
+    ));
+    world.push(Sphere::new(
+        Point::new(0.0, 0.0, -1.0),
+        0.5,
+        Rc::new(material_center),
+    ));
+    world.push(Sphere::new(
+        Point::new(-1.0, 0.0, -1.0),
+        0.5,
+        Rc::new(material_left.clone()),
+    ));
+    world.push(Sphere::new(
+        Point::new(-1.0, 0.0, -1.0),
+        -0.45,
         Rc::new(material_left),
     ));
     world.push(Sphere::new(
-        Point::new(r, 0.0, -1.0),
-        r,
+        Point::new(1.0, 0.0, -1.0),
+        0.5,
         Rc::new(material_right),
     ));
 
     // Camera
-    let camera = Camera::new(90.0, aspect_ratio.ratio());
+    let camera = Camera::new(
+        Point::new(-2.0, 2.0, 1.0),
+        Point::new(0.0, 0.0, -1.0),
+        Vec3::new(0.0, 1.0, 0.0),
+        20.0,
+        aspect_ratio.ratio(),
+    );
 
     // Render
     println!("P3\n{} {}\n255", image_width, image_height);
