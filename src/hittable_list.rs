@@ -54,8 +54,8 @@ pub fn random_scene(rng: &mut dyn rand::RngCore) -> HittableList<Sphere> {
         1000.0,
         ground_material,
     )];
-    for a in -11..11 {
-        for b in -11..11 {
+    for a in (-11..11).step_by(2) {
+        for b in (-11..11).step_by(2) {
             let choose_mat: f64 = rng.gen();
             let center = Point::new(
                 a as f64 + 0.9 * rng.gen::<f64>(),

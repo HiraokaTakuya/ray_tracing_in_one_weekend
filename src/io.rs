@@ -22,7 +22,7 @@ pub fn process() {
         width: 3,
         height: 2,
     };
-    let image_width = 1200;
+    let image_width = 300;
     let image_height = image_width * aspect_ratio.height / aspect_ratio.width;
     let samples_per_pixel = 500;
     let max_depth = 50;
