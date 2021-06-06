@@ -3,11 +3,10 @@ use crate::{
     hittable_list::random_scene,
     vec3::{Color, Point, Vec3},
 };
-use rand::prelude::*;
-use std::io::prelude::*;
+use rand::{Rng, SeedableRng};
 
 pub fn process() -> Vec<u8> {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand_xoshiro::Xoshiro256StarStar::seed_from_u64(123);
 
     // Image
     struct AspectRatio {
