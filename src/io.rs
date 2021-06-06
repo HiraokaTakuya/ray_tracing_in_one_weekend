@@ -4,8 +4,9 @@ use crate::{
     vec3::{Color, Point, Vec3},
 };
 use rand::prelude::*;
+use std::io::prelude::*;
 
-pub fn process() {
+pub fn process() -> Vec<u8> {
     let mut rng = rand::thread_rng();
 
     // Image
@@ -47,7 +48,7 @@ pub fn process() {
     );
 
     // Render
-    println!("P3\n{} {}\n255", image_width, image_height);
+    let mut v: Vec<u8> = vec![];
 
     for j in (0..image_height).rev() {
         for i in 0..image_width {
@@ -58,7 +59,12 @@ pub fn process() {
                 let ray = camera.ray(u, v, &mut rng);
                 color += ray.color(&world, &mut rng, max_depth);
             }
-            println!("{}", color.to_string(samples_per_pixel as f64));
+            let scale = 1.0 / samples_per_pixel as f64;
+            v.push((256.0 * (color[0] * scale).sqrt().clamp(0.0, 0.999)) as u8);
+            v.push((256.0 * (color[1] * scale).sqrt().clamp(0.0, 0.999)) as u8);
+            v.push((256.0 * (color[2] * scale).sqrt().clamp(0.0, 0.999)) as u8);
+            v.push(255);
         }
     }
+    v
 }
